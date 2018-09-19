@@ -41,7 +41,6 @@ promise1
 promise2
 setTimeout
 ```
-  *Chrome以外的浏览器会有不同的结果：Microsoft Edge, Firefox 40, iOS Safari and desktop Safari 8.0.8 log setTimeout before promise1 and promise2 - although it appears to be a race condition. This is really weird, as Firefox 39 and Safari 8.0.7 get it consistently right.
 
 运行过程动画：
 
@@ -122,6 +121,6 @@ timeout
 timeout
 ```
 
-
+  *Chrome以外的浏览器会有不同的结果：Microsoft Edge, Firefox 40, iOS Safari and desktop Safari 8.0.8 log setTimeout before promise1 and promise2 - although it appears to be a race condition. This is really weird, as Firefox 39 and Safari 8.0.7 get it consistently right.
 
   *以上内容摘自https://forrany.github.io/2018/09/04/Tasks,-microtasks,-queues-and-schedules/
