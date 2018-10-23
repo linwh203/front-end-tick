@@ -423,6 +423,259 @@ var header = (function () {
     
 观察者模式的优点很明显：时间上的解耦，对象之间的解耦。
 
+### 5. 命令模式
+
+命令模式指的是一个执行某些特定事情的指令。常见的应用场景是：有时候需要向对象发送请求，但不知道接受者是谁，也不知道请求的操作是什么。
+
+例如：订餐，客人需要给厨师发送请求，至于那个厨师做，做的步骤。客人不知道。这就是命令模式。
+
+```
+//定义命令模式执行
+    var setCommand = function (button, func) {
+        button.onclick = function () {
+            func.execute();
+        };
+    };
+    var MenuBar = {
+        refresh: function () {
+            console.log("刷新页面");
+        }
+    };
+    var RefreshMenuBarCommand = function (receiver) {
+        return {
+            execute: function () {
+                receiver.refresh();
+            }
+        }
+    };
+    var refreshMenuBarCommand = RefreshMenuBarCommand("MenuBar");
+    setCommand(button1,refreshMenuBarCommand);
+```
+
+命令模式的用处很大，也可以做撤销命令，回放这种功能。比如，我们把用户按键命令做一个封装，制作一个播放功能。
+
+以下代码可以执行并记录按键，当点击按钮时，会执行按键对应动作。
+
+```
+//定义按键动作
+    var Ryu = {
+        W: function () {
+            console.log("用户按下W");
+        },
+        S: function () {
+            console.log("用户按下S");
+        }
+    };
+    //创建命令
+    var makeCommand = function (receiver, state) {
+        return function () {
+            if(receiver[state])
+                receiver[state]();
+        }
+    };
+    //可执行按键Json
+    var commands = {
+        "119": "W",
+        "115": "S"
+    };
+    //保存按键记录
+    var commandStack = [];
+    document.onkeypress = function (ev) {
+        var keyCode = ev.keyCode, command = makeCommand(Ryu, commands[keyCode]);
+        if (command) {
+            command();
+            commandStack.push(command);
+        }
+    };
+    //注册按键监听
+    document.getElementById("replay").addEventListener('click', function () {
+        var commad;
+        while (command = commandStack.shift()) {
+            command();
+        }
+    }, false);
+```
+
+#### 实例：宏命令
+
+宏命令可以一次执行一组命令。我们定义了各种指令，定义了如何执行指令。就可以做成一组命令的这种模式了。
+
+针对不同的步骤，也可以只用此方法。例如： 
+
+var macroCommand2 = new MacroCommand();
+macroCommand2.add(macroCommand);
+macroCommand2.execute();
+可以指定不同命令。
+
+```
+!(function () {
+    var closeDoorCommand = {
+        execute: function () {
+            console.log("关门");
+        }
+    };
+    var openPcCommand = {
+        execute: function () {
+            console.log("开电脑");
+        }
+    };
+    var openQQCommand = {
+        execute: function () {
+            console.log("登录QQ");
+        }
+    };
+    var MacroCommand = function(){
+      return {
+          commandsList:[],
+          add:function(command){
+              this.commandsList.push(command);
+          },
+          execute:function(){
+              for(var i= 0,command;command=this.commandsList[i++];){
+                  command.execute();
+              }
+          }
+      };
+    };
+    var macroCommand = new MacroCommand();
+    macroCommand.add(closeDoorCommand);
+    macroCommand.add(openPcCommand);
+    macroCommand.execute();
+})()
+```
+
+### 6.模板方法模式
+
+模板方法是一种只需要继承就可以实现的非常简单的模式。封装了子类的算法框架，包含一些公共方法一级封装子类中的所有方法执行顺序。
+
+咖啡与茶。咖啡的步骤：1.烧水，2.冲泡，3.倒进杯子，4.放牛奶。茶叶的步骤：1.烧水，2.浸泡，3.倒进杯子，4.加柠檬
+
+我们分离不同点：2,4。然后使用抽象父类定义，并实现对应方法。其中的init方法，就是模板方法，因为他封装了子类算法框架就，作为一个算法的模板。
+
+```
+!(function () {
+   var Beverage = function(){};
+    Beverage.prototype.boilWater = function(){ //烧水
+        console.log("把水煮沸");
+    };
+    Beverage.prototype.brew = function(){}; //第二步，方法
+    Beverage.prototype.pourInCup = function(){};
+    Beverage.prototype.addCondiments=function(){};
+    Beverage.prototype.init = function(){
+        this.boilWater();
+        this.brew();
+        this.pourInCup();
+        this.addCondiments();
+    };
+    //创建咖啡子类
+    var Coffee = function(){};
+    Coffee.prototype = new Beverage();
+    Coffee.prototype.brew = function(){
+        console.log("用沸水冲泡咖啡");
+    };
+    Coffee.prototype.pourInCup = function(){
+        console.log("把咖啡倒进杯子");
+    };
+    Coffee.prototype.addCondiments = function(){
+        console.log("加糖加牛奶");
+    };
+    var Coffee = new Coffee();
+    Coffee.init();
+})()
+```
+
+针对模板方法，有一些个性的子类，不打算接受模板约束。那么可以使用钩子方法来创建。
+
+我们修改模板方法让他适应钩子方法。
+
+```
+Beverage.prototype.customerWantsCondiments = function () {
+        return true;
+    };
+    Beverage.prototype.init = function () {
+        this.boilWater();
+        this.brew();
+        this.pourInCup();
+        if (this.customerWantsCondiments()) {
+            this.addCondiments();
+        }
+    };
+    //创建咖啡子类
+    var Coffee = function () {
+    };
+    Coffee.prototype = new Beverage();
+    Coffee.prototype.customerWantsCondiments = function(){
+        return window.confirm("请问需要调料吗");
+    }
+```
+
+### 7.享元模式 
+
+享元模式的核心是运用共享技术来有效支持大量细粒度的对象。
+
+例如，现在有50件男装和50件女装，分别需要模特穿上并且拍照。如果我们不使用享元模式，那么就需要new 100个模特。
+
+使用享元模式，只需要new 2个模特，然后让他们穿上不同的衣服即可。
+
+享元模式的使用取决于：一个程序中使用了大量相似对象。造成很大的内存开销。大多数状态是外部状态。可以用较少的功效对象取代大量对象。
+
+```
+!(function () {
+    var Model = function (sex) {
+        this.sex = sex;
+    };
+    Model.prototype.takePhoto = function () {
+        console.log("sex=" + this.sex + " underwear=" + this.underwear);
+    };
+    var maleModel = new Model("male");
+    var femaleModel = new Model("female");
+    for(var i=1;i<=50;i++){
+        maleModel.underwear = "underwear"+i;
+        maleModel.takePhoto();
+    }
+})()
+```
+#### 对象池
+
+维护一个装载空闲对象的池子，如果需要对象的时候，不是直接new，而是转从对象池里获取。如果没有空闲对象则创建，完成职责后再次进入池子。
+
+我们做一个公用的对象池，来维护新建dom对象。
+
+```
+!(function () {
+    var objectPoolFactory = function (createObjFn) {
+        var objectPool = [];
+        return {
+            create: function () {
+                var obj = objectPool.length === 0 ? createObjFn.apply(this, arguments) : objectPool.shift();
+                return obj;
+            },
+            recover: function (obj) {
+                objectPool.push(obj);
+            }
+        };
+    };
+    var iframeFactory = objectPoolFactory(function () {
+        var iframe = document.createElement("iframe");
+        document.body.appendChild(iframe);
+        iframe.onload = function () {
+            iframe.onload = null;
+            iframeFactory.recover(iframe);
+        }
+        return iframe
+    });
+    var iframe1 = iframeFactory.create();
+    iframe1.src = "http://www.baidu.com";
+
+    setTimeout(function(){
+        var iframe2 = iframeFactory.create();
+        iframe2.src = "http://www.baidu.com";
+    },2000);
+})()
+```
+
+
+
 
 
 ### 知识点：a. prototype与面向对象取舍
