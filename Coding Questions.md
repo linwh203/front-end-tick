@@ -101,6 +101,9 @@ doSomething().then(doSomethingElse);
 ```
 Answer: 
 1st=> you will get result as doSomethingElse() 
+
 2nd=> you will get result as undefined
+
 3rd=> you will get the result of doSomethingElse() as param for next action
+
 4th=> you will get doSomethingElse as param for next action
