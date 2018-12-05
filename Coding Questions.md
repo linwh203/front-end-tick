@@ -6,13 +6,13 @@ Question: What is the value of `foo`?
 ```javascript
 var foo = 10 + '20';
 ```
-Best Answer: "1020"
+Answer: "1020"
 
 Question: What will be the output of the code below?
 ```javascript
 console.log(0.1 + 0.2 == 0.3);
 ```
-Best Answer: false => 0.1 + 0.2 = 0.300000000000001 => 0.2 + 0.4 = 0.60000000001 ... and so
+Answer: false => 0.1 + 0.2 = 0.300000000000001 => 0.2 + 0.4 = 0.60000000001 ... and so
 
 Question: How would you make this work?
 ```javascript
@@ -36,6 +36,7 @@ Question: What value is returned from the following statement?
 ```javascript
 "i'm a lasagna hog".split("").reverse().join("");
 ```
+Answer: "goh angasal a m'i"
 
 Question: What is the value of `window.foo`?
 ```javascript
