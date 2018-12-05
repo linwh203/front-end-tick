@@ -42,6 +42,7 @@ Question: What is the value of `window.foo`?
 ```javascript
 ( window.foo || ( window.foo = "bar" ) );
 ```
+Answer:  "bar"
 
 Question: What is the outcome of the two alerts below?
 ```javascript
@@ -52,6 +53,7 @@ var foo = "Hello";
 })();
 alert(foo + bar);
 ```
+Answer: first alert => Hello World; second alert didn't trigger, throw error => bar is not defined
 
 Question: What is the value of `foo.length`?
 ```javascript
