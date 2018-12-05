@@ -6,6 +6,7 @@ Question: What is the value of `foo`?
 ```javascript
 var foo = 10 + '20';
 ```
+Best Answer: "1020"
 
 Question: What will be the output of the code below?
 ```javascript
