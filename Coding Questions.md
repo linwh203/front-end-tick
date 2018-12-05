@@ -70,6 +70,7 @@ var bar = foo;
 foo.x = foo = {n: 2};
 ```
 Answer: undefined => but bar.x is { n: 2} 
+img src="https://img-blog.csdn.net/20161128211727305?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center"
 
 Question: What does the following code print?
 ```javascript
