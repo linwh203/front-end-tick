@@ -69,7 +69,7 @@ var foo = {n: 1};
 var bar = foo;
 foo.x = foo = {n: 2};
 ```
-Answer: undefined
+Answer: undefined => but bar.x is { n: 2} 
 
 Question: What does the following code print?
 ```javascript
