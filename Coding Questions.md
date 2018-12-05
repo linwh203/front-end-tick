@@ -61,6 +61,7 @@ var foo = [];
 foo.push(1);
 foo.push(2);
 ```
+Answer: 2
 
 Question: What is the value of `foo.x`?
 ```javascript
@@ -68,6 +69,7 @@ var foo = {n: 1};
 var bar = foo;
 foo.x = foo = {n: 2};
 ```
+Answer: undefined
 
 Question: What does the following code print?
 ```javascript
@@ -80,6 +82,7 @@ Promise.resolve().then(function() {
 })
 console.log('four');
 ```
+Answer: one => four => three => two
 
 Question: What is the difference between these four promises?
 ```javascript
